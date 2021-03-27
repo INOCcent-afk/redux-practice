@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import "./App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { loadMovies } from "./actions/moviesAction";
+import Movie from "./Movie";
+import Nav from "./Nav";
+import AddMovie from "./AddMovie";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadMovies());
+  }, [dispatch]);
+
+  const { movies } = useSelector((state) => state.allMovies);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Nav />
+      <AddMovie />
+      {movies.map((movie) => (
+        <Movie
+          name={movie.name}
+          price={movie.price}
+          key={movie.id}
+          id={movie.id}
+        />
+      ))}
     </div>
   );
 }
